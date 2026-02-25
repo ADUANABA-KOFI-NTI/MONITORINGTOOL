@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Monitoring Tool — Ahafo Ano South-West Education Directorate</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f0f4f8;
+  --surface: #ffffff;
+  --surface2: #f7f9fc;
+  --border: #e2e8f0;
+  --border2: #cbd5e1;
+  --primary: #1a56db;
+  --primary-light: #ebf0ff;
+  --primary-dark: #1440a8;
+  --green: #059669;
+  --green-light: #ecfdf5;
+  --red: #dc2626;
+  --red-light: #fef2f2;
+  --amber: #d97706;
+  --amber-light: #fffbeb;
+  --text: #0f172a;
+  --text2: #334155;
+  --text3: #64748b;
+  --text4: #94a3b8;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -1px rgba(0,0,0,0.04);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -2px rgba(0,0,0,0.04);
+  --radius: 12px;
+  --radius-sm: 8px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; min-height:100vh; font-size:14px; line-height:1.6; }
+.topbar { background:var(--primary-dark); color:#fff; padding:0 2rem; height:38px; display:flex; align-items:center; justify-content:space-between; font-size:0.68rem; letter-spacing:0.04em; }
+.topbar-left { opacity:0.75; }
+.topbar-right { display:flex; gap:1.5rem; align-items:center; }
+.topbar-right span { opacity:0.75; }
+.topbar-right strong { color:#93c5fd; font-weight:600; }
+.header { background:var(--surface); border-bottom:1px solid var(--border); padding:1rem 2rem; box-shadow:var(--shadow); position:sticky; top:0; z-index:200; }
+.header-inner { max-width:1280px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:1rem; }
+.brand { display:flex; align-items:center; gap:14px; }
+.brand-logo { width:46px; height:46px; background:linear-gradient(135deg,var(--primary) 0%,var(--primary-dark) 100%); border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:22px; box-shadow:0 4px 12px rgba(26,86,219,0.3); flex-shrink:0; }
+.brand-name { font-family:'Plus Jakarta Sans',sans-serif; font-weight:800; font-size:0.92rem; color:var(--text); line-height:1.2; text-transform:uppercase; letter-spacing:0.02em; }
+.brand-sub { font-size:0.67rem; color:var(--primary); font-weight:600; text-transform:uppercase; letter-spacing:0.08em; margin-top:2px; }
+.officer-pill { display:flex; align-items:center; gap:8px; background:var(--primary-light); border:1px solid rgba(26,86,219,0.2); border-radius:50px; padding:6px 14px; font-size:0.75rem; font-weight:600; color:var(--primary); }
+.officer-pill .dot { width:7px; height:7px; border-radius:50%; background:var(--green); flex-shrink:0; }
+.search-area { max-width:1280px; margin:0 auto; padding:2rem 2rem 0; }
+.search-card { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:1.5rem; box-shadow:var(--shadow-md); }
+.search-card-header { display:flex; align-items:center; gap:10px; margin-bottom:1rem; }
+.search-icon-wrap { width:36px; height:36px; background:var(--primary-light); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; }
+.search-card-title { font-family:'Plus Jakarta Sans',sans-serif; font-weight:700; font-size:1rem; color:var(--text); }
+.search-card-sub { font-size:0.71rem; color:var(--text3); margin-top:2px; }
+.search-input-wrap { position:relative; }
+.search-input { width:100%; background:var(--surface2); border:2px solid var(--border); border-radius:var(--radius); padding:0.9rem 3rem 0.9rem 2.8rem; font-family:'Inter',sans-serif; font-size:0.95rem; color:var(--text); outline:none; transition:border-color 0.2s, box-shadow 0.2s; }
+.search-input:focus { border-color:var(--primary); box-shadow:0 0 0 3px rgba(26,86,219,0.1); background:var(--surface); }
+.search-input::placeholder { color:var(--text4); }
+.s-icon { position:absolute; left:0.9rem; top:50%; transform:translateY(-50%); color:var(--text3); pointer-events:none; font-size:1rem; }
+.s-clear { position:absolute; right:0.9rem; top:50%; transform:translateY(-50%); background:var(--border2); border:none; width:22px; height:22px; border-radius:50%; cursor:pointer; font-size:0.7rem; color:var(--text3); display:none; align-items:center; justify-content:center; transition:background 0.15s; }
+.s-clear.vis { display:flex; }
+.search-hint-row { display:flex; align-items:center; gap:6px; margin-top:0.6rem; font-size:0.7rem; color:var(--text4); }
+.hint-dot { width:5px; height:5px; border-radius:50%; background:var(--green); flex-shrink:0; }
+
+.drop { position:absolute; top:calc(100% + 4px); left:0; right:0; background:var(--surface); border:2px solid var(--primary); border-radius:var(--radius); box-shadow:var(--shadow-lg); max-height:340px; overflow-y:auto; z-index:9999; display:none; }
+.drop.open { display:block; }
+.drop-count { padding:0.45rem 1rem; font-size:0.63rem; color:var(--text4); background:var(--primary-light); border-bottom:1px solid var(--border); font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:var(--primary); }
+.drop-item { display:flex; align-items:center; justify-content:space-between; padding:0.75rem 1rem; cursor:pointer; border-bottom:1px solid var(--border); gap:1rem; background:var(--surface); }
+.drop-item:last-child { border-bottom:none; }
+.drop-item:hover, .drop-item.focused { background:var(--primary-light); }
+.drop-school-name { font-weight:600; font-size:0.87rem; color:var(--text); }
+.drop-school-name mark { background:rgba(26,86,219,0.2); color:var(--primary); border-radius:2px; padding:0 2px; font-weight:700; font-style:normal; }
+.drop-school-meta { font-size:0.67rem; color:var(--text3); margin-top:2px; }
+.drop-emis-badge { font-size:0.67rem; font-weight:600; color:var(--primary); background:var(--primary-light); border:1px solid rgba(26,86,219,0.2); border-radius:4px; padding:2px 8px; white-space:nowrap; flex-shrink:0; }
+.drop-msg { padding:1.2rem; text-align:center; color:var(--text4); font-size:0.8rem; }
+.drop-loading { padding:1rem; text-align:center; color:var(--primary); font-size:0.8rem; display:flex; align-items:center; justify-content:center; gap:8px; }
+.spinner { width:14px; height:14px; border:2px solid var(--primary-light); border-top-color:var(--primary); border-radius:50%; animation:spin 0.6s linear infinite; }
+@keyframes spin { to{transform:rotate(360deg)} }
+
+.empty-state { max-width:1280px; margin:3rem auto; padding:0 2rem; text-align:center; }
+.empty-icon { width:80px; height:80px; background:var(--primary-light); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:2.2rem; margin:0 auto 1.5rem; }
+.empty-title { font-family:'Plus Jakarta Sans',sans-serif; font-weight:700; font-size:1.1rem; color:var(--text2); }
+.empty-sub { color:var(--text3); font-size:0.8rem; margin-top:0.4rem; }
+
+.loading-overlay { display:none; max-width:1280px; margin:2rem auto; padding:0 2rem; }
+.loading-overlay.vis { display:block; }
+.loading-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:2rem; text-align:center; box-shadow:var(--shadow); }
+.loading-card .spinner { width:32px; height:32px; border-width:3px; margin:0 auto 1rem; display:block; }
+.loading-card p { color:var(--text3); font-size:0.85rem; }
+.loading-card strong { color:var(--text); display:block; font-size:1rem; margin-bottom:0.3rem; }
+
+.school-wrap { display:none; max-width:1280px; margin:1.5rem auto; padding:0 2rem 2rem; }
+.school-wrap.vis { display:block; }
+.school-hero { background:linear-gradient(135deg,var(--primary-dark) 0%,var(--primary) 100%); border-radius:16px; padding:1.75rem 2rem; margin-bottom:1.25rem; display:flex; justify-content:space-between; align-items:flex-start; gap:1rem; box-shadow:0 8px 24px rgba(26,86,219,0.25); position:relative; overflow:hidden; }
+.school-hero::before { content:''; position:absolute; top:-40px; right:-40px; width:180px; height:180px; border-radius:50%; background:rgba(255,255,255,0.06); }
+.hero-left { position:relative; z-index:1; }
+.hero-name { font-family:'Plus Jakarta Sans',sans-serif; font-weight:800; font-size:1.35rem; color:#fff; line-height:1.25; }
+.hero-emis { font-size:0.71rem; color:rgba(255,255,255,0.6); margin-top:5px; font-weight:500; }
+.hero-badges { display:flex; gap:0.5rem; flex-wrap:wrap; margin-top:12px; }
+.hb { font-size:0.63rem; font-weight:600; padding:3px 10px; border-radius:50px; letter-spacing:0.05em; text-transform:uppercase; }
+.hb-level { background:rgba(255,255,255,0.2); color:#fff; }
+.hb-circuit { background:rgba(253,230,138,0.25); color:#fde68a; }
+.hb-rel { background:rgba(167,243,208,0.2); color:#a7f3d0; }
+.hero-right { position:relative; z-index:1; text-align:right; flex-shrink:0; }
+.hero-loaded { display:inline-flex; align-items:center; gap:6px; background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.2); border-radius:50px; padding:5px 12px; font-size:0.7rem; font-weight:600; color:#fff; }
+.hero-loaded .dot { width:7px; height:7px; border-radius:50%; background:#86efac; animation:pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.3} }
+.hero-est { font-size:0.67rem; color:rgba(255,255,255,0.55); margin-top:8px; }
+.flags-banner { display:none; background:var(--red-light); border:1px solid rgba(220,38,38,0.2); border-radius:var(--radius); padding:1rem 1.25rem; margin-bottom:1.25rem; }
+.flags-banner.vis { display:block; }
+.flags-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:0.5rem; flex-wrap:wrap; gap:0.5rem; }
+.flags-title { font-weight:700; font-size:0.8rem; color:var(--red); display:flex; align-items:center; gap:6px; }
+.flag-actions { display:flex; gap:0.5rem; }
+.flags-list { list-style:none; }
+.flags-list li { font-size:0.78rem; color:var(--text2); padding:3px 0; display:flex; gap:8px; align-items:center; }
+.flags-list li::before { content:'⚑'; color:var(--red); font-size:0.75rem; }
+.action-bar { display:flex; gap:0.6rem; justify-content:flex-end; margin-bottom:1.25rem; flex-wrap:wrap; }
+.btn { font-family:'Inter',sans-serif; font-size:0.75rem; font-weight:600; padding:0.5rem 1rem; border-radius:var(--radius-sm); cursor:pointer; transition:all 0.18s; border:1px solid transparent; display:inline-flex; align-items:center; gap:5px; letter-spacing:0.02em; }
+.btn-outline { background:var(--surface); border-color:var(--border2); color:var(--text2); }
+.btn-outline:hover { border-color:var(--primary); color:var(--primary); background:var(--primary-light); }
+.btn-danger { background:var(--surface); border-color:rgba(220,38,38,0.3); color:var(--red); }
+.btn-danger:hover { background:var(--red-light); }
+.tab-nav { display:flex; gap:0.3rem; flex-wrap:wrap; margin-bottom:1.25rem; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:0.35rem; box-shadow:var(--shadow); }
+.tab-btn { background:transparent; border:none; border-radius:var(--radius-sm); padding:0.52rem 1rem; font-family:'Inter',sans-serif; font-weight:600; font-size:0.75rem; color:var(--text3); cursor:pointer; transition:all 0.18s; display:flex; align-items:center; gap:6px; white-space:nowrap; }
+.tab-btn:hover { color:var(--text); background:var(--surface2); }
+.tab-btn.active { background:var(--primary); color:#fff; box-shadow:0 2px 8px rgba(26,86,219,0.25); }
+.tab-panel { display:none; }
+.tab-panel.active { display:block; }
+.grid-2 { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:1rem; }
+.grid-1 { display:grid; grid-template-columns:1fr; gap:1rem; }
+.icard { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow); }
+.icard-head { padding:0.7rem 1.2rem; background:var(--surface2); border-bottom:1px solid var(--border); display:flex; align-items:center; gap:8px; }
+.head-ico { width:26px; height:26px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:0.85rem; flex-shrink:0; }
+.ico-blue { background:var(--primary-light); } .ico-amber { background:var(--amber-light); } .ico-green { background:var(--green-light); } .ico-red { background:var(--red-light); }
+.icard-title { font-weight:700; font-size:0.76rem; color:var(--text2); text-transform:uppercase; letter-spacing:0.06em; }
+.field-row { display:flex; align-items:flex-start; justify-content:space-between; padding:0.6rem 1.2rem; gap:1rem; border-bottom:1px solid var(--border); transition:background 0.1s; }
+.field-row:last-child { border-bottom:none; }
+.field-row:hover { background:var(--surface2); }
+.field-label { font-size:0.74rem; color:var(--text3); font-weight:500; flex-shrink:0; max-width:55%; line-height:1.4; }
+.field-right { display:flex; align-items:center; gap:8px; flex-shrink:0; }
+.fval { font-size:0.8rem; font-weight:600; color:var(--text); text-align:right; }
+.fval.num { color:var(--primary); font-weight:700; font-size:0.85rem; }
+.fval.empty { color:var(--text4); font-style:italic; font-weight:400; font-size:0.72rem; }
+.bool-y { display:inline-flex; align-items:center; gap:4px; color:var(--green); font-weight:700; font-size:0.78rem; }
+.bool-n { display:inline-flex; align-items:center; gap:4px; color:var(--red); font-weight:700; font-size:0.78rem; }
+.bool-y::before { content:'✓'; }
+.bool-n::before { content:'✗'; }
+.flag-btn { background:none; border:1px solid var(--border2); border-radius:5px; color:var(--text4); font-size:0.63rem; padding:2px 7px; cursor:pointer; font-family:'Inter',sans-serif; font-weight:600; transition:all 0.15s; white-space:nowrap; }
+.flag-btn:hover { border-color:var(--red); color:var(--red); background:var(--red-light); }
+.flag-btn.on { background:var(--red-light); border-color:rgba(220,38,38,0.4); color:var(--red); }
+.etable-wrap { overflow-x:auto; }
+.etable { width:100%; border-collapse:collapse; font-size:0.8rem; }
+.etable thead tr { background:var(--surface2); }
+.etable th { padding:0.6rem 1rem; text-align:right; font-size:0.63rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--text3); font-weight:700; border-bottom:2px solid var(--border); }
+.etable th:first-child { text-align:left; }
+.etable td { padding:0.6rem 1rem; text-align:right; border-bottom:1px solid var(--border); color:var(--text2); font-weight:500; }
+.etable td:first-child { text-align:left; font-weight:600; color:var(--text); }
+.etable tr:hover td { background:rgba(26,86,219,0.04); }
+.etable .ct { color:var(--primary); font-weight:700; }
+.etable tfoot td { font-weight:700; border-top:2px solid var(--border); border-bottom:none; color:var(--text); background:var(--surface2); }
+.etable tfoot td:first-child { color:var(--text3); font-size:0.68rem; text-transform:uppercase; letter-spacing:0.06em; }
+footer { max-width:1280px; margin:2rem auto 0; padding:1.5rem 2rem 3rem; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:1.5rem; }
+.footer-org { font-family:'Plus Jakarta Sans',sans-serif; font-weight:800; font-size:0.88rem; color:var(--text); text-transform:uppercase; letter-spacing:0.03em; }
+.footer-unit { font-size:0.68rem; font-weight:700; color:var(--primary); text-transform:uppercase; letter-spacing:0.06em; margin-top:3px; }
+.footer-notice { font-size:0.63rem; color:var(--text4); margin-top:5px; font-style:italic; }
+.sig-block { margin-top:1.2rem; }
+.sig-label { font-size:0.6rem; color:var(--text4); text-transform:uppercase; letter-spacing:0.1em; font-weight:600; margin-bottom:4px; }
+.sig-line { width:220px; border-bottom:1.5px solid var(--border2); height:34px; }
+.sig-name { font-size:0.7rem; color:var(--text3); margin-top:5px; font-weight:600; }
+.sig-date { font-size:0.63rem; color:var(--text4); }
+.footer-right { text-align:right; font-size:0.67rem; color:var(--text4); line-height:1.9; }
+::-webkit-scrollbar { width:5px; height:5px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:var(--border2); border-radius:10px; }
+@media(max-width:640px) {
+  .topbar { font-size:0.6rem; padding:0 1rem; }
+  .header { padding:0.75rem 1rem; }
+  .search-area, .school-wrap { padding-left:1rem; padding-right:1rem; }
+  .school-hero { flex-direction:column; }
+  .tab-btn { font-size:0.7rem; padding:0.42rem 0.7rem; }
+  .grid-2 { grid-template-columns:1fr; }
+  footer { flex-direction:column; align-items:flex-start; }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-left">AHAFO ANO SOUTH-WEST EDUCATION DIRECTORATE &nbsp;·&nbsp; STATISTICS AND PLANNING UNIT</span>
+  <div class="topbar-right">
+    <span>MONITORING TOOL</span>
+    <strong id="topbar-date"></strong>
+  </div>
+</div>
+
+<header class="header">
+  <div class="header-inner">
+    <div class="brand">
+      <div class="brand-logo">🏫</div>
+      <div>
+        <div class="brand-name">Ahafo Ano South-West<br>Education Directorate</div>
+        <div class="brand-sub">Statistics &amp; Planning · Field Monitoring Tool</div>
+      </div>
+    </div>
+    <div class="officer-pill">
+      <div class="dot"></div>
+      <span id="officer-display">Officer</span>
+    </div>
+  </div>
+</header>
+
+<div class="search-area">
+  <div class="search-card">
+    <div class="search-card-header">
+      <div class="search-icon-wrap">🔎</div>
+      <div>
+        <div class="search-card-title">Search School</div>
+        <div class="search-card-sub">Type any part of the school name — results appear instantly, then full data loads from the database</div>
+      </div>
+    </div>
+    <div class="search-input-wrap" id="swrap">
+      <span class="s-icon">🔍</span>
+      <input class="search-input" id="sinput" type="text" placeholder="Start typing a school name…" autocomplete="off" spellcheck="false">
+      <button class="s-clear" id="sclear" onclick="clearSearch()">✕</button>
+      <div class="drop" id="sdrop"></div>
+    </div>
+    <div class="search-hint-row">
+      <div class="hint-dot"></div>
+      <span>Names from local list · Full data from database &nbsp;·&nbsp; Status: <strong id="db-status" style="color:var(--green)">Ready</strong></span>
+    </div>
+  </div>
+</div>
+
+<!-- EMPTY STATE -->
+<div class="empty-state" id="emptyState">
+  <div class="empty-icon">🏫</div>
+  <div class="empty-title">Search for a school to begin</div>
+  <div class="empty-sub">Type any part of the school name above — results will appear instantly</div>
+</div>
+
+<!-- LOADING STATE -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-card">
+    <div class="spinner"></div>
+    <strong id="loading-name">Loading school data…</strong>
+    <p>Fetching full record from database. Please wait.</p>
+  </div>
+</div>
+
+<!-- SCHOOL CARD -->
+<div class="school-wrap" id="schoolWrap">
+  <div class="school-hero">
+    <div class="hero-left">
+      <div class="hero-name" id="sc-name">—</div>
+      <div class="hero-emis" id="sc-emis">EMIS: —</div>
+      <div class="hero-badges">
+        <span class="hb hb-level" id="sc-level">—</span>
+        <span class="hb hb-circuit" id="sc-circuit">—</span>
+        <span class="hb hb-rel" id="sc-rel">—</span>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-loaded"><div class="dot"></div>Record Loaded</div>
+      <div class="hero-est" id="sc-est"></div>
+    </div>
+  </div>
+
+  <div class="flags-banner" id="flagsBanner">
+    <div class="flags-top">
+      <div class="flags-title">⚑ Flagged Discrepancies (<span id="flagCount">0</span>)</div>
+      <div class="flag-actions">
+        <button class="btn btn-outline" onclick="exportPDF()">⬇ Export PDF</button>
+        <button class="btn btn-danger" onclick="clearFlags()">✕ Clear</button>
+      </div>
+    </div>
+    <ul class="flags-list" id="flagsList"></ul>
+  </div>
+
+  <div class="action-bar" id="actionBar">
+    <button class="btn btn-outline" onclick="exportPDF()">⬇ Export PDF Report</button>
+    <button class="btn btn-danger" onclick="clearFlags()">✕ Clear Flags</button>
+  </div>
+
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('identity',this)">🏷️ Identity</button>
+    <button class="tab-btn" onclick="switchTab('enrolment',this)">👥 Enrolment</button>
+    <button class="tab-btn" onclick="switchTab('furniture',this)">🪑 Furniture</button>
+    <button class="tab-btn" onclick="switchTab('staff',this)">👨‍🏫 Staff</button>
+    <button class="tab-btn" onclick="switchTab('classrooms',this)">🏗️ Classrooms</button>
+    <button class="tab-btn" onclick="switchTab('wash',this)">💧 WASH</button>
+    <button class="tab-btn" onclick="switchTab('welfare',this)">🏠 Welfare</button>
+    <button class="tab-btn" onclick="switchTab('facilities',this)">⚡ Facilities</button>
+  </div>
+
+  <div class="tab-panel active" id="panel-identity">
+    <div class="grid-2">
+      <div class="icard"><div class="icard-head"><div class="head-ico ico-blue">🏷️</div><div class="icard-title">School Details</div></div><div id="id-basic"></div></div>
+      <div class="icard"><div class="icard-head"><div class="head-ico ico-amber">👤</div><div class="icard-title">Administration</div></div><div id="id-admin"></div></div>
+    </div>
+  </div>
+  <div class="tab-panel" id="panel-enrolment">
+    <div class="grid-1">
+      <div class="icard"><div class="icard-head"><div class="head-ico ico-blue">📊</div><div class="icard-title">KG Enrolment</div></div><div class="etable-wrap"><table class="etable" id="enrol-kg"></table></div></div>
+      <div class="icard"><div class="icard-head"><div class="head-ico ico-green">📊</div><div class="icard-title">Primary (Basic 1–6) Enrolment</div></div><div class="etable-wrap"><table class="etable" id="enrol-primary"></table></div></div>
+      <div class="icard"><div class="icard-head"><div class="head-ico ico-amber">📊</div><div class="icard-title">JHS Enrolment</div></div><div class="etable-wrap"><table class="etable" id="enrol-jhs"></table></div></div>
+    </div>
+  </div>
+  <div class="tab-panel" id="panel-furniture">
+    <div class="grid-2">
+      <div class="icard"><div class="icard-head"><div class="head-ico ico-amber">🪑</div><div class="icard-title">KG Furniture</div></div><div id="furn-kg"></div></div>
+      <div class="icard"><div class="icard-head"><div class="head-ico ico-blue">🪑</div><div class="icard-title">Basic 1–3 Desks</div></div><div id="furn-p1"></div></div>
+      <div class="icard"><div class="icard-head"><div class="head-ico ico-green">🪑</div><div class="icard-title">Basic 4–6 Desks</div></div><div id="furn-p2"></div></div>
+      <div class="icard"><div class="icard-head"><div class="head-ico ico-red">🪑</div><div class="icard-title">JHS Desks</div></div><div id="furn-jhs"></div></div>
+    </div>
+  </div>
+  <div class="tab-panel" id="panel-staff">
+    <div class="grid-2">
+      <div class="icard"><div class="icard-head"><div class="head-ico ico-blue">👨‍🏫</div><div class="icard-title">KG Trained Teachers</div></div><div id="staff-kg"></div></div>
+      <div class="icard"><div class="icard-head"><div class="head-ico ico-green">👨‍🏫</div><div class="icard-title">Primary Trained Teachers</div></div><div id="staff-primary"></div></div>
+      <div class="icard"><div class="icard-head"><div class="head-ico ico-amber">👨‍🏫</div><div class="icard-title">JHS Trained Teachers</div></div><div id="staff-jhs"></div></div>
+      <div class="icard"><div class="icard-head"><div class="head-ico ico-red">📋</div><div class="icard-title">Vacancies &amp; Furniture</div></div><div id="staff-vac"></div></div>
+    </div>
+  </div>
+  <div class="tab-panel" id="panel-classrooms">
+    <div class="grid-2">
+      <div class="icard"><div class="icard-head"><div class="head-ico ico-blue">🏗️</div><div class="icard-title">Overall Count</div></div><div id="class-overall"></div></div>
+      <div class="icard"><div class="icard-head"><div class="head-ico ico-amber">🏗️</div><div class="icard-title">KG Classrooms</div></div><div id="class-kg"></div></div>
+      <div class="icard"><div class="icard-head"><div class="head-ico ico-green">🏗️</div><div class="icard-title">Primary Classrooms</div></div><div id="class-primary"></div></div>
+      <div class="icard"><div class="icard-head"><div class="head-ico ico-red">🏗️</div><div class="icard-title">JHS Classrooms</div></div><div id="class-jhs"></div></div>
+    </div>
+  </div>
+  <div class="tab-panel" id="panel-wash">
+    <div class="grid-2">
+      <div class="icard"><div class="icard-head"><div class="head-ico ico-blue">💧</div><div class="icard-title">Water Access</div></div><div id="wash-water"></div></div>
+      <div class="icard"><div class="icard-head"><div class="head-ico ico-green">🚻</div><div class="icard-title">Toilet Facilities</div></div><div id="wash-toilet"></div></div>
+      <div class="icard"><div class="icard-head"><div class="head-ico ico-amber">🚿</div><div class="icard-title">Urinal Facilities</div></div><div id="wash-urinal"></div></div>
+    </div>
+  </div>
+  <div class="tab-panel" id="panel-welfare">
+    <div class="grid-2">
+      <div class="icard"><div class="icard-head"><div class="head-ico ico-blue">🏠</div><div class="icard-title">Staff Accommodation</div></div><div id="welfare-accom"></div></div>
+      <div class="icard"><div class="icard-head"><div class="head-ico ico-amber">🔨</div><div class="icard-title">Ongoing Projects</div></div><div id="welfare-proj"></div></div>
+    </div>
+  </div>
+  <div class="tab-panel" id="panel-facilities">
+    <div class="grid-2">
+      <div class="icard"><div class="icard-head"><div class="head-ico ico-blue">🏢</div><div class="icard-title">Infrastructure &amp; Programmes</div></div><div id="fac-infra"></div></div>
+      <div class="icard"><div class="icard-head"><div class="head-ico ico-amber">⚡</div><div class="icard-title">Electricity</div></div><div id="fac-elec"></div></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div>
+    <div class="footer-org">Ahafo Ano South-West Education Directorate</div>
+    <div class="footer-unit">Statistics and Planning Unit</div>
+    <div class="footer-notice">For official field monitoring and verification purposes only.</div>
+    <div class="sig-block">
+      <div class="sig-label">Verified by (Signature)</div>
+      <div class="sig-line"></div>
+      <div class="sig-name" id="footer-name"></div>
+      <div class="sig-date" id="footer-date"></div>
+    </div>
+  </div>
+  <div class="footer-right">
+    <div>Statistics Officer</div>
+    <div id="footer-date2"></div>
+  </div>
+</footer>
+
+<script>
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwOGxLKBrjm17WIpuXZkyXYPcViBJWb9TsXrsrYQgTPYJh9-fBEwN0RadfOm6BoRFCS/exec';
+
+let currentSchool = null;
+let flags = {};
+
+// ── INIT ──
+const dateStr = new Date().toLocaleDateString('en-GB',{weekday:'short',day:'2-digit',month:'short',year:'numeric'});
+document.getElementById('topbar-date').textContent = dateStr;
+document.getElementById('footer-date').textContent = dateStr;
+document.getElementById('footer-date2').textContent = dateStr;
+
+let officer = localStorage.getItem('ges_officer') || '';
+if(!officer){ officer = prompt('Enter your name (Statistics Officer):','') || 'Officer'; localStorage.setItem('ges_officer', officer); }
+document.getElementById('officer-display').textContent = officer;
+document.getElementById('footer-name').textContent = officer;
+
+const dbEl = document.getElementById('db-status');
+const hasRealURL = APPS_SCRIPT_URL.startsWith('https://script.google.com');
+dbEl.textContent = hasRealURL ? 'Connected ✓' : 'Demo Mode (no URL set)';
+dbEl.style.color = hasRealURL ? 'var(--green)' : 'var(--amber)';
+
+// ── ALL 90 SCHOOL NAMES ──
+const SCHOOL_NAMES = [
+  "ABAASUA D/A BASIC","ABODEASE D/A BASIC","ACHIASE D/A JHS","ACHIASE D/A PRIMARY",
+  "ADADEKROM D/A JHS","ADADEKROM D/A PRIMARY","ADIEMBRA D/A BASIC","AFRESENI D/A JHS",
+  "AFRESENI D/A PRIMARY","AFRESENI-CAMP D/A PRIMARY","AGYEIBI D/A PRIMARY","ANGO D/A BASIC",
+  "ANITEMFE D/A BASIC","ASEKANTIA D/A PRIMARY","ASIBEY-NKWANTA D/A JHS","ASIBEY-NKWANTA D/A PRIMARY",
+  "ASUKESE ST. PETER'S D/A BASIC","ASUOKOR D/A JHS","ASUOKOR D/A PRIMARY","BARNIEKROM D/A JHS",
+  "BARNIEKROM D/A PRIMARY","BARNIEKROM ISLAMIC BASIC","BEPOSO D/A JHS","BEPOSO D/A PRIMARY SCHOOL",
+  "BOATENGKROM D/A JHS","BOATENGKROM ENG/ARABIC PRIMARY","BONKRON D/A BASIC","BONKWASO I D/A JHS",
+  "BONKWASO I D/A PRIMARY","BONKWASO I ISLAMIC BASIC","BONKWASO II D/A BASIC","BONSUKROM D/A JHS",
+  "BONSUKROM D/A PRIMARY SCHOOL","DOMIABRA D/A JHS","DOMIABRA R/C PRIMARY 'A'","DOMIABRA R/C PRIMARY 'B'",
+  "DOMIABRA-NYAMEBEKYERE IV D/A PRIMARY","DOTIEM-MPASASO D/A JHS","DOTIEM-MPASASO D/A PRIMARY",
+  "DUNYAN NKWANTA D/A JHS","DUNYAN NKWANTA D/A PRIMARY SCHOOL","GYAEKONTABUO ISLAMIC PRIMARY",
+  "HWIBAA D/A JHS","HWIBAA ISLAMIC BASIC","HWIBAA R/C PRIMARY","KOKOTEASUA D/A BASIC",
+  "KRAMOKROM ENG/ARABIC D/A PRIMARY","KUNSU AL-AZIZ ISLAMIC BASIC","KUNSU D/A JHS 'A'",
+  "KUNSU D/A JHS 'B'","KUNSU D/A PRIMARY 'A'","KUNSU D/A PRIMARY 'B'","KUNSU R/C BASIC SCHOOL",
+  "KUNSU SDA PRIMARY","KUNSU-CAMP D/A JHS","KUNSU-CAMP D/A PRIMARY","KUNSU-DOTIEM D/A JHS",
+  "KUNSU-DOTIEM D/A PRIMARY","MANHYIA D/A BASIC","MANKRANSO D/A JHS 'A'","MANKRANSO D/A JHS 'B' SCHOOL",
+  "MANKRANSO D/A PRIMARY 'A'","MANKRANSO D/A PRIMARY 'B' SCHOOL","MANKRANSO HOLY PROPHET ISLAMIC BASIC",
+  "MANKRANSO METHODIST JHS","MANKRANSO METHODIST PRIMARY","MMOROBEM D/A PRIMARY","MPASASO I D/A PRIMARY",
+  "MPASASO II D/A JHS","MPASASO II D/A PRIMARY","MPASASO II ST. PETERS R/C JHS",
+  "MPASASO II ST. PETERS R/C PRIMARY","MPASASO NURIYA ISLAMIC BASIC","MPASASO TABIRI GYANSA D/A JHS",
+  "NKYENSEDANHO D/A BASIC","NYAMEADOM D/A JHS","NYAMEADOM D/A PRIMARY SCHOOL",
+  "NYAMEBEKYERE II D/A PRIMARY","NYAMEBEKYERE III D/A BASIC","NYINANUFU D/A JHS",
+  "NYINANUFU D/A PRIMARY SCHOOL","ODOYEFE D/A PRIMARY","OHIAPAE D/A BASIC","OSEIKROM D/A PRIMARY",
+  "PEWODIE D/A BASIC","WIOSO ALMA MATTER D/A PRIMARY","WIOSO D/A JHS","WIOSO D/A PRIMARY",
+  "WIOSO ST. PETER'S R/C JHS","WIOSO ST. PETER'S R/C PRIMARY SCHOOL"
+];
+
+// ── SEARCH ──
+const sinput = document.getElementById('sinput');
+const sdrop  = document.getElementById('sdrop');
+const sclear = document.getElementById('sclear');
+let searchTimer;
+
+sinput.addEventListener('input', function(){
+  const q = this.value.trim();
+  sclear.classList.toggle('vis', q.length > 0);
+  clearTimeout(searchTimer);
+  if(!q){ closeDrop(); return; }
+  searchTimer = setTimeout(() => showDropdown(q), 150);
+});
+
+sinput.addEventListener('keydown', function(e){
+  if(e.key === 'Escape'){ closeDrop(); sinput.blur(); }
+});
+
+document.addEventListener('click', function(e){
+  if(!e.target.closest('#swrap')) closeDrop();
+});
+
+function closeDrop(){ sdrop.classList.remove('open'); }
+
+function clearSearch(){
+  sinput.value = '';
+  sclear.classList.remove('vis');
+  closeDrop();
+  sinput.focus();
+}
+
+function showDropdown(q){
+  const ql = q.toLowerCase();
+  const matches = SCHOOL_NAMES.filter(n => n.toLowerCase().includes(ql));
+
+  if(matches.length === 0){
+    sdrop.innerHTML = '<div class="drop-msg">No schools found matching "' + q + '"</div>';
+    sdrop.classList.add('open');
+    return;
+  }
+
+  const rx = new RegExp('(' + q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + ')', 'gi');
+  let html = '<div class="drop-count">' + matches.length + ' school' + (matches.length !== 1 ? 's' : '') + ' found</div>';
+
+  matches.slice(0, 20).forEach(function(name){
+    const hl = name.replace(rx, '<mark>$1</mark>');
+    let level = 'Basic';
+    if(name.includes('JHS')) level = 'JHS';
+    else if(name.includes('PRIMARY')) level = 'Primary';
+    const escaped = name.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+    html += '<div class="drop-item" onclick="selectSchool(\'' + escaped + '\')">'
+          + '<div>'
+          + '<div class="drop-school-name">' + hl + '</div>'
+          + '<div class="drop-school-meta">Mankranso Circuit · ' + level + '</div>'
+          + '</div>'
+          + '<div class="drop-emis-badge">' + level + '</div>'
+          + '</div>';
+  });
+
+  sdrop.innerHTML = html;
+  sdrop.classList.add('open');
+}
+
+// ── SELECT SCHOOL ──
+function selectSchool(schoolName){
+  closeDrop();
+  sinput.value = schoolName;
+  sclear.classList.add('vis');
+  flags = {};
+
+  document.getElementById('emptyState').style.display = 'none';
+  document.getElementById('schoolWrap').classList.remove('vis');
+  document.getElementById('loadingOverlay').classList.add('vis');
+  document.getElementById('loading-name').textContent = schoolName;
+
+  if(!hasRealURL){
+    setTimeout(function(){
+      document.getElementById('loadingOverlay').classList.remove('vis');
+      var demoSchool = {
+        'School': schoolName,
+        'Level': schoolName.includes('JHS') ? 'JHS' : schoolName.includes('PRIMARY') ? 'Primary' : 'Basic',
+        'Circuit': 'Mankranso',
+        'Religious Affiliation': schoolName.includes('ISLAMIC') ? 'Islamic' : schoolName.includes('R/C') ? 'Catholic' : 'Public',
+        'EMIS CODE': 'DEMO',
+        'NAME OF HEADTEACHER': '(Demo Mode)',
+        'STAFF ID OF HEADTEACHER': ''
+      };
+      currentSchool = demoSchool;
+      renderSchool(demoSchool);
+      dbEl.textContent = 'Demo Mode — set APPS_SCRIPT_URL to load real data';
+      dbEl.style.color = 'var(--amber)';
+    }, 600);
+    return;
+  }
+
+  var cbName = 'gs_cb_' + Date.now();
+  var script = document.createElement('script');
+
+  var timeout = setTimeout(function(){
+    script.remove();
+    delete window[cbName];
+    document.getElementById('loadingOverlay').classList.remove('vis');
+    document.getElementById('emptyState').style.display = 'block';
+    document.getElementById('emptyState').querySelector('.empty-title').textContent = 'Connection failed';
+    document.getElementById('emptyState').querySelector('.empty-sub').textContent = 'Could not reach the database. Check your Apps Script URL and internet connection.';
+    dbEl.textContent = 'Connection Error';
+    dbEl.style.color = 'var(--red)';
+  }, 15000);
+
+  window[cbName] = function(data){
+    clearTimeout(timeout);
+    script.remove();
+    delete window[cbName];
+    document.getElementById('loadingOverlay').classList.remove('vis');
+    if(data && data.length > 0){
+      currentSchool = data[0];
+      renderSchool(data[0]);
+      dbEl.textContent = 'Connected ✓';
+      dbEl.style.color = 'var(--green)';
+    } else {
+      document.getElementById('emptyState').style.display = 'block';
+      document.getElementById('emptyState').querySelector('.empty-title').textContent = 'School not found in database';
+      document.getElementById('emptyState').querySelector('.empty-sub').textContent = '"' + schoolName + '" matched the local list but has no record in the spreadsheet yet.';
+      dbEl.textContent = 'No record found';
+      dbEl.style.color = 'var(--amber)';
+    }
+  };
+
+  script.onerror = function(){
+    clearTimeout(timeout);
+    script.remove();
+    delete window[cbName];
+    document.getElementById('loadingOverlay').classList.remove('vis');
+    document.getElementById('emptyState').style.display = 'block';
+    document.getElementById('emptyState').querySelector('.empty-title').textContent = 'Script error';
+    document.getElementById('emptyState').querySelector('.empty-sub').textContent = 'The Apps Script returned an error. Check the script is deployed and accessible.';
+    dbEl.textContent = 'Script Error';
+    dbEl.style.color = 'var(--red)';
+  };
+
+  script.src = APPS_SCRIPT_URL + '?action=search&q=' + encodeURIComponent(schoolName) + '&callback=' + cbName;
+  document.head.appendChild(script);
+}
+
+// ── RENDER ──
+function renderSchool(s){
+  document.getElementById('emptyState').style.display = 'none';
+  document.getElementById('schoolWrap').classList.add('vis');
+
+  document.getElementById('sc-name').textContent    = V(s,'School') || V(s,'SCHOOL') || '—';
+  document.getElementById('sc-emis').textContent    = 'EMIS: ' + (V(s,'EMIS CODE') || '—');
+  document.getElementById('sc-level').textContent   = V(s,'Level') || '—';
+  document.getElementById('sc-circuit').textContent = (V(s,'Circuit') || '—') + ' Circuit';
+  document.getElementById('sc-rel').textContent     = V(s,'Religious Affiliation') || '—';
+  document.getElementById('sc-est').textContent     = V(s,'Established Date') ? 'Est. ' + V(s,'Established Date') : '';
+
+  F('id-basic',[
+    ['School Name', V(s,'School')||V(s,'SCHOOL')],
+    ['Circuit', V(s,'Circuit')],
+    ['Email', V(s,'SCHOOL EMAIL ADDRESS')],
+    ['Religious Affiliation', V(s,'Religious Affiliation')],
+    ['EMIS Code', V(s,'EMIS CODE')],
+    ['Level', V(s,'Level')],
+    ['Established', V(s,'Established Date')],
+  ]);
+  F('id-admin',[
+    ['Headteacher Name', V(s,'NAME OF HEADTEACHER')],
+    ['Staff ID', V(s,'STAFF ID OF HEADTEACHER')],
+  ]);
+  ET('enrol-kg',[
+    ['KG 1', V(s,'KG 1 - Total Enrolment'), V(s,'KG 1 - Boys'), V(s,'KG 1 - Girls')],
+    ['KG 2', V(s,'KG 2 - Total Enrolment'), V(s,'KG 2 - Boys'), V(s,'KG 2 - Girls')],
+  ]);
+  ET('enrol-primary',[
+    ['Basic 1', V(s,'Basic 1 - Total Enrolment'), V(s,'Basic 1 - Boys'), V(s,'Basic 1 - Girls')],
+    ['Basic 2', V(s,'Basic 2 - Total Enrolment'), V(s,'Basic 2 - Boys'), V(s,'Basic 2 - Girls')],
+    ['Basic 3', V(s,'Basic 3 - Total Enrolment'), V(s,'Basic 3 - Boys'), V(s,'Basic 3 - Girls')],
+    ['Basic 4', V(s,'Basic 4 - Total Enrolment'), V(s,'Basic 4 - Boys'), V(s,'Basic 4 - Girls')],
+    ['Basic 5', V(s,'Basic 5 - Total Enrolment'), V(s,'Basic 5 - Boys'), V(s,'Basic 5 - Girls')],
+    ['Basic 6', V(s,'Basic 6 - Total Enrolment'), V(s,'Basic 6 - Boys'), V(s,'Basic 6 - Girls')],
+  ]);
+  ET('enrol-jhs',[
+    ['JHS 1', V(s,'JHS 1 - Total Enrolment'), V(s,'JHS 1 - Boys'), V(s,'JHS 1 - Girls')],
+    ['JHS 2', V(s,'JHS 2 - Total Enrolment'), V(s,'JHS 2 - Boys'), V(s,'JHS 2 - Girls')],
+    ['JHS 3', V(s,'JHS 3 - Total Enrolment'), V(s,'JHS 3 - Boys'), V(s,'JHS 3 - Girls')],
+  ]);
+  F('furn-kg',[
+    ['KG 1 – Hexagonal Tables', V(s,'KG 1 - Hexagonal Tables'),'num'],
+    ['KG 1 – Sitting Places', V(s,'KG 1 - Sitting Places'),'num'],
+    ['KG 1 – Writing Places', V(s,'KG 1 - Writing Places'),'num'],
+    ['KG 2 – Hexagonal Tables', V(s,'KG 2 - Hexagonal Tables'),'num'],
+    ['KG 2 – Sitting Places', V(s,'KG 2 - Sitting Places'),'num'],
+    ['KG 2 – Writing Places', V(s,'KG 2 - Writing Places'),'num'],
+  ]);
+  F('furn-p1',[
+    ['Basic 1 – Mono Desks', V(s,'Basic 1 - Mono Desks'),'num'],
+    ['Basic 1 – Dual Desks', V(s,'Basic 1 - Dual Desks'),'num'],
+    ['Basic 2 – Mono Desks', V(s,'Basic 2 - Mono Desks'),'num'],
+    ['Basic 2 – Dual Desks', V(s,'Basic 2 - Dual Desks'),'num'],
+    ['Basic 3 – Mono Desks', V(s,'Basic 3 - Mono Desks'),'num'],
+    ['Basic 3 – Dual Desks', V(s,'Basic 3 - Dual Desks'),'num'],
+  ]);
+  F('furn-p2',[
+    ['Basic 4 – Mono Desks', V(s,'Basic 4 - Mono Desks'),'num'],
+    ['Basic 4 – Dual Desks', V(s,'Basic 4 - Dual Desks'),'num'],
+    ['Basic 5 – Mono Desks', V(s,'Basic 5 - Mono Desks'),'num'],
+    ['Basic 5 – Dual Desks', V(s,'Basic 5 - Dual Desks'),'num'],
+    ['Basic 6 – Mono Desks', V(s,'Basic 6 - Mono Desks'),'num'],
+    ['Basic 6 – Dual Desks', V(s,'Basic 6 - Dual Desks'),'num'],
+  ]);
+  F('furn-jhs',[
+    ['JHS 1 – Mono Desks', V(s,'JHS 1 - Mono Desks'),'num'],
+    ['JHS 1 – Dual Desks', V(s,'JHS 1 - Dual Desks'),'num'],
+    ['JHS 2 – Mono Desks', V(s,'JHS 2 - Mono Desks'),'num'],
+    ['JHS 2 – Dual Desks', V(s,'JHS 2 - Dual Desks'),'num'],
+    ['JHS 3 – Mono Desks', V(s,'JHS 3 - Mono Desks'),'num'],
+    ['JHS 3 – Dual Desks', V(s,'JHS 3 - Dual Desks'),'num'],
+  ]);
+  F('staff-kg',[
+    ['Total Trained', V(s,'KG - Total Trained Teachers'),'num'],
+    ['Male Trained', V(s,'KG - Male Trained Teachers'),'num'],
+    ['Female Trained', V(s,'KG - Female Trained Teachers'),'num'],
+  ]);
+  F('staff-primary',[
+    ['Total Trained', V(s,'Primary - Total Trained Teachers'),'num'],
+    ['Male Trained', V(s,'Primary - Male Trained Teachers'),'num'],
+    ['Female Trained', V(s,'Primary - Female Trained Teachers'),'num'],
+  ]);
+  F('staff-jhs',[
+    ['Total Trained', V(s,'JHS - Total Trained Teachers'),'num'],
+    ['Male Trained', V(s,'JHS - Male Trained Teachers'),'num'],
+    ['Female Trained', V(s,'JHS - Female Trained Teachers'),'num'],
+  ]);
+  F('staff-vac',[
+    ['Vacancies', V(s,'Vacancies'),'num'],
+    ['Teacher Desks', V(s,'Number of Teachers Desks'),'num'],
+    ['Teacher Chairs', V(s,'Number of Teachers Chairs'),'num'],
+  ]);
+  F('class-overall',[
+    ['Old No. of Classrooms', V(s,'OLD NUMBER OF CLASSROOMS'),'num'],
+    ['Current No. of Classrooms', V(s,'NUMBER OF CLASSROOMS'),'num'],
+  ]);
+  F('class-kg',[
+    ['Permanent', V(s,'KG - Permanent Classrooms'),'num'],
+    ['Temporary', V(s,'KG - Temporary Classrooms'),'num'],
+  ]);
+  F('class-primary',[
+    ['Permanent', V(s,'Primary - Permanent Classrooms'),'num'],
+    ['Temporary', V(s,'Primary - Temporary Classrooms'),'num'],
+  ]);
+  F('class-jhs',[
+    ['Permanent', V(s,'JHS - Permanent Classrooms'),'num'],
+    ['Temporary', V(s,'JHS - Temporary Classrooms'),'num'],
+  ]);
+  F('wash-water',[
+    ['Has Access to Water', V(s,'Has Access to Water'),'bool'],
+    ['Water Ownership', V(s,'Water Ownership')],
+    ['Shared with Nearby School', V(s,'Water Shared with Nearby School'),'bool'],
+    ['Source Type(s)', V(s,'Water Source Types')],
+  ]);
+  F('wash-toilet',[
+    ['Owns Toilet Facilities', V(s,'Owns Toilet Facilities'),'bool'],
+    ['Learners Have Access', V(s,'Learners Have Toilet Access'),'bool'],
+    ['Cubicles – Boys', V(s,'Toilet Cubicles - Boys'),'num'],
+    ['Cubicles – Girls', V(s,'Toilet Cubicles - Girls'),'num'],
+  ]);
+  F('wash-urinal',[
+    ['Owns Urinal Facilities', V(s,'Owns Urinal Facilities'),'bool'],
+    ['Learners Have Access', V(s,'Learners Have Urinal Access'),'bool'],
+    ['Stations – Boys', V(s,'Urinal Stations - Boys'),'num'],
+    ['Stations – Girls', V(s,'Urinal Stations - Girls'),'num'],
+  ]);
+  F('welfare-accom',[
+    ['Has Accommodation', V(s,'Has Staff Accommodation'),'bool'],
+    ['Total Teachers', V(s,'Staff Accommodation - Total Teachers'),'num'],
+    ['Male Teachers', V(s,'Staff Accommodation - Male Teachers'),'num'],
+    ['Female Teachers', V(s,'Staff Accommodation - Female Teachers'),'num'],
+  ]);
+  F('welfare-proj',[
+    ['Has Ongoing Projects', V(s,'Has Ongoing Projects'),'bool'],
+    ['Projects Summary', V(s,'Projects Summary')],
+    ['Projects Data', V(s,'Projects Data')],
+  ]);
+  F('fac-infra',[
+    ['Has Staff Common Room', V(s,'Has Staff Common Room'),'bool'],
+    ['Has ICT Laboratory', V(s,'Has ICT Laboratory'),'bool'],
+    ['Has Library', V(s,'Has Library'),'bool'],
+    ['Has School Farm', V(s,'Has School Farm'),'bool'],
+    ['GALOP Beneficiary', V(s,'Is GALOP Beneficiary'),'bool'],
+    ['School Feeding Beneficiary', V(s,'Is School Feeding Beneficiary'),'bool'],
+  ]);
+  F('fac-elec',[
+    ['Has Electricity Access', V(s,'Has Electricity Access'),'bool'],
+    ['Electricity Source', V(s,'Electricity Source')],
+  ]);
+
+  updateFlags();
+  document.getElementById('schoolWrap').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function V(s,k){ const v=s[k]; return (v!==undefined&&v!==null&&String(v).trim()!=='') ? v : null; }
+
+function F(id, fields){
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.innerHTML = fields.map(([label, value, type]) => {
+    const fk = id+'::'+label;
+    const on = !!flags[fk];
+    let vh;
+    if(value===null||value===undefined||String(value).trim()===''){
+      vh = '<span class="fval empty">Not recorded</span>';
+    } else if(type==='bool'){
+      const yes = ['yes','true','1'].includes(String(value).toLowerCase());
+      vh = '<span class="'+(yes?'bool-y':'bool-n')+'">'+(yes?'YES':'NO')+'</span>';
+    } else if(type==='num'){
+      vh = '<span class="fval num">'+value+'</span>';
+    } else {
+      vh = '<span class="fval">'+value+'</span>';
+    }
+    const escapedLabel = label.replace(/'/g,"\\'");
+    const escapedFk = fk.replace(/'/g,"\\'");
+    return '<div class="field-row">'
+      +'<span class="field-label">'+label+'</span>'
+      +'<div class="field-right">'+vh
+      +'<button class="flag-btn'+(on?' on':'')+'" onclick="toggleFlag(\''+escapedFk+'\',\''+escapedLabel+'\',this)">'+(on?'⚑ Flagged':'⚑')+'</button>'
+      +'</div></div>';
+  }).join('');
+}
+
+function ET(id, rows){
+  const t = document.getElementById(id);
+  if(!t) return;
+  let tt=0,tb=0,tg=0;
+  rows.forEach(function(r){ tt+=+r[1]||0; tb+=+r[2]||0; tg+=+r[3]||0; });
+  t.innerHTML = '<thead><tr><th>Class</th><th>Total</th><th>Boys</th><th>Girls</th></tr></thead>'
+    +'<tbody>'+rows.map(function(r){
+      return '<tr><td>'+r[0]+'</td><td class="ct">'+(r[1]??'—')+'</td><td>'+(r[2]??'—')+'</td><td>'+(r[3]??'—')+'</td></tr>';
+    }).join('')+'</tbody>'
+    +'<tfoot><tr><td>TOTAL</td><td class="ct">'+tt+'</td><td>'+tb+'</td><td>'+tg+'</td></tr></tfoot>';
+}
+
+function toggleFlag(key, label, btn){
+  if(flags[key]){ delete flags[key]; btn.classList.remove('on'); btn.textContent='⚑'; }
+  else { flags[key]=label; btn.classList.add('on'); btn.textContent='⚑ Flagged'; }
+  updateFlags();
+}
+function updateFlags(){
+  const keys = Object.keys(flags);
+  const banner = document.getElementById('flagsBanner');
+  const bar    = document.getElementById('actionBar');
+  document.getElementById('flagCount').textContent = keys.length;
+  document.getElementById('flagsList').innerHTML = keys.map(function(k){ return '<li>'+flags[k]+'</li>'; }).join('');
+  if(keys.length){ banner.classList.add('vis'); bar.style.display='none'; }
+  else { banner.classList.remove('vis'); bar.style.display='flex'; }
+}
+function clearFlags(){
+  flags={};
+  document.querySelectorAll('.flag-btn.on').forEach(function(b){ b.classList.remove('on'); b.textContent='⚑'; });
+  updateFlags();
+}
+
+// ── PDF EXPORT ──
+function exportPDF(){
+  if(!currentSchool){ alert('No school loaded.'); return; }
+
+  const n      = currentSchool['School']||currentSchool['SCHOOL']||'Unknown';
+  const emis   = currentSchool['EMIS CODE']||'—';
+  const circuit = currentSchool['Circuit']||'—';
+  const level  = currentSchool['Level']||'—';
+  const rel    = currentSchool['Religious Affiliation']||'—';
+  const d      = new Date().toLocaleDateString('en-GB',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
+  const fi     = Object.values(flags);
+
+  // Collect ALL school data for the full report
+  function row(label, val){
+    if(val===null||val===undefined||String(val).trim()==='') return '';
+    return '<tr><td class="lbl">'+label+'</td><td class="val">'+val+'</td></tr>';
+  }
+  function section(title, rows){
+    const content = rows.join('');
+    if(!content) return '';
+    return '<div class="section"><h3>'+title+'</h3><table>'+content+'</table></div>';
+  }
+  function bool(v){
+    if(v===null||v===undefined) return '—';
+    return ['yes','true','1'].includes(String(v).toLowerCase()) ? '✓ YES' : '✗ NO';
+  }
+  function num(v){ return (v!==null&&v!==undefined&&String(v).trim()!=='') ? v : '—'; }
+  function val(k){ return V(currentSchool,k); }
+
+  // Enrolment table helper
+  function enrolTable(title, rows){
+    let tt=0,tb=0,tg=0;
+    const bodyRows = rows.map(function(r){
+      const t=+r[1]||0, b=+r[2]||0, g=+r[3]||0;
+      tt+=t; tb+=b; tg+=g;
+      return '<tr><td>'+r[0]+'</td><td>'+(r[1]??'—')+'</td><td>'+(r[2]??'—')+'</td><td>'+(r[3]??'—')+'</td></tr>';
+    }).join('');
+    return '<div class="section"><h3>'+title+'</h3>'
+      +'<table class="enrol-table"><thead><tr><th>Class</th><th>Total</th><th>Boys</th><th>Girls</th></tr></thead>'
+      +'<tbody>'+bodyRows+'</tbody>'
+      +'<tfoot><tr><td><strong>TOTAL</strong></td><td><strong>'+tt+'</strong></td><td><strong>'+tb+'</strong></td><td><strong>'+tg+'</strong></td></tr></tfoot>'
+      +'</table></div>';
+  }
+
+  const htmlContent = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Verification Report – ${n}</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; font-size:10pt; color:#1a1a2e; background:#fff; padding:0; }
+  
+  .cover { background:linear-gradient(135deg,#1440a8 0%,#1a56db 100%); color:#fff; padding:32px 40px 28px; }
+  .cover .org { font-size:7pt; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; opacity:0.7; margin-bottom:6px; }
+  .cover h1 { font-size:18pt; font-weight:800; line-height:1.2; margin-bottom:4px; }
+  .cover .emis-line { font-size:8pt; opacity:0.65; margin-bottom:16px; }
+  .cover .meta-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px 24px; }
+  .cover .meta-item { font-size:8pt; }
+  .cover .meta-item .label { opacity:0.6; font-size:7pt; text-transform:uppercase; letter-spacing:0.08em; }
+  .cover .meta-item .value { font-weight:700; margin-top:1px; }
+
+  .body-wrap { padding:24px 40px; }
+
+  .flags-section { background:#fff0f0; border:1.5px solid #dc2626; border-radius:6px; padding:16px 20px; margin-bottom:24px; }
+  .flags-section h2 { font-size:10pt; font-weight:800; color:#dc2626; margin-bottom:10px; display:flex; align-items:center; gap:6px; }
+  .flags-section ul { list-style:none; }
+  .flags-section li { font-size:9pt; padding:4px 0; border-bottom:1px solid rgba(220,38,38,0.15); color:#333; display:flex; align-items:center; gap:8px; }
+  .flags-section li:last-child { border-bottom:none; }
+  .flags-section li::before { content:'⚑'; color:#dc2626; }
+  .no-flags { background:#f0fdf4; border:1.5px solid #059669; border-radius:6px; padding:12px 20px; margin-bottom:24px; font-size:9pt; color:#059669; font-weight:600; }
+
+  .section { margin-bottom:18px; break-inside:avoid; }
+  .section h3 { font-size:8pt; font-weight:800; text-transform:uppercase; letter-spacing:0.1em; color:#1440a8; background:#ebf0ff; padding:5px 10px; border-left:3px solid #1a56db; margin-bottom:0; }
+  .section table { width:100%; border-collapse:collapse; font-size:9pt; }
+  .section table td { padding:5px 10px; border-bottom:1px solid #e2e8f0; }
+  .section table td.lbl { color:#64748b; font-weight:500; width:45%; }
+  .section table td.val { font-weight:600; color:#0f172a; }
+  .section table tr:last-child td { border-bottom:none; }
+  .section table tr:nth-child(even) td { background:#f7f9fc; }
+
+  .enrol-table { width:100%; border-collapse:collapse; font-size:9pt; }
+  .enrol-table th { padding:5px 10px; background:#1440a8; color:#fff; font-size:7.5pt; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; text-align:left; }
+  .enrol-table th:not(:first-child) { text-align:right; }
+  .enrol-table td { padding:5px 10px; border-bottom:1px solid #e2e8f0; }
+  .enrol-table td:not(:first-child) { text-align:right; color:#1a56db; font-weight:700; }
+  .enrol-table tfoot td { background:#f7f9fc; border-top:2px solid #e2e8f0; }
+
+  .sig-section { margin-top:32px; border-top:1.5px solid #e2e8f0; padding-top:20px; display:grid; grid-template-columns:1fr 1fr; gap:40px; }
+  .sig-box .sig-label { font-size:7pt; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:#94a3b8; margin-bottom:30px; }
+  .sig-box .sig-line { border-bottom:1.5px solid #334155; margin-bottom:4px; }
+  .sig-box .sig-name { font-size:9pt; font-weight:700; color:#0f172a; }
+  .sig-box .sig-role { font-size:7.5pt; color:#64748b; margin-top:2px; }
+
+  .page-footer { margin-top:20px; padding-top:12px; border-top:1px solid #e2e8f0; display:flex; justify-content:space-between; font-size:7pt; color:#94a3b8; }
+
+  @media print {
+    body { padding:0; }
+    .cover { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+    .flags-section, .no-flags { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+    .section h3 { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+    .enrol-table th { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="org">Ahafo Ano South-West Education Directorate · Statistics &amp; Planning Unit</div>
+  <h1>${n}</h1>
+  <div class="emis-line">EMIS Code: ${emis} &nbsp;·&nbsp; Field Verification Report</div>
+  <div class="meta-grid">
+    <div class="meta-item"><div class="label">Circuit</div><div class="value">${circuit}</div></div>
+    <div class="meta-item"><div class="label">Level</div><div class="value">${level}</div></div>
+    <div class="meta-item"><div class="label">Affiliation</div><div class="value">${rel}</div></div>
+    <div class="meta-item"><div class="label">Verified By</div><div class="value">${officer}</div></div>
+    <div class="meta-item"><div class="label">Date</div><div class="value">${d}</div></div>
+    <div class="meta-item"><div class="label">Discrepancies</div><div class="value">${fi.length} flagged</div></div>
+  </div>
+</div>
+
+<div class="body-wrap">
+
+  ${fi.length > 0
+    ? '<div class="flags-section"><h2>⚑ Flagged Discrepancies (' + fi.length + ')</h2><ul>' + fi.map(function(x){ return '<li>'+x+'</li>'; }).join('') + '</ul></div>'
+    : '<div class="no-flags">✓ No discrepancies flagged during this verification visit.</div>'
+  }
+
+  ${section('School Identity & Administration', [
+    row('School Name', val('School')||val('SCHOOL')),
+    row('EMIS Code', val('EMIS CODE')),
+    row('Circuit', val('Circuit')),
+    row('Level', val('Level')),
+    row('Religious Affiliation', val('Religious Affiliation')),
+    row('Email Address', val('SCHOOL EMAIL ADDRESS')),
+    row('Established', val('Established Date')),
+    row('Headteacher', val('NAME OF HEADTEACHER')),
+    row('Staff ID', val('STAFF ID OF HEADTEACHER')),
+  ])}
+
+  ${enrolTable('KG Enrolment', [
+    ['KG 1', val('KG 1 - Total Enrolment'), val('KG 1 - Boys'), val('KG 1 - Girls')],
+    ['KG 2', val('KG 2 - Total Enrolment'), val('KG 2 - Boys'), val('KG 2 - Girls')],
+  ])}
+
+  ${enrolTable('Primary (Basic 1–6) Enrolment', [
+    ['Basic 1', val('Basic 1 - Total Enrolment'), val('Basic 1 - Boys'), val('Basic 1 - Girls')],
+    ['Basic 2', val('Basic 2 - Total Enrolment'), val('Basic 2 - Boys'), val('Basic 2 - Girls')],
+    ['Basic 3', val('Basic 3 - Total Enrolment'), val('Basic 3 - Boys'), val('Basic 3 - Girls')],
+    ['Basic 4', val('Basic 4 - Total Enrolment'), val('Basic 4 - Boys'), val('Basic 4 - Girls')],
+    ['Basic 5', val('Basic 5 - Total Enrolment'), val('Basic 5 - Boys'), val('Basic 5 - Girls')],
+    ['Basic 6', val('Basic 6 - Total Enrolment'), val('Basic 6 - Boys'), val('Basic 6 - Girls')],
+  ])}
+
+  ${enrolTable('JHS Enrolment', [
+    ['JHS 1', val('JHS 1 - Total Enrolment'), val('JHS 1 - Boys'), val('JHS 1 - Girls')],
+    ['JHS 2', val('JHS 2 - Total Enrolment'), val('JHS 2 - Boys'), val('JHS 2 - Girls')],
+    ['JHS 3', val('JHS 3 - Total Enrolment'), val('JHS 3 - Boys'), val('JHS 3 - Girls')],
+  ])}
+
+  ${section('Teaching Staff', [
+    row('KG – Total Trained', num(val('KG - Total Trained Teachers'))),
+    row('KG – Male Trained', num(val('KG - Male Trained Teachers'))),
+    row('KG – Female Trained', num(val('KG - Female Trained Teachers'))),
+    row('Primary – Total Trained', num(val('Primary - Total Trained Teachers'))),
+    row('Primary – Male Trained', num(val('Primary - Male Trained Teachers'))),
+    row('Primary – Female Trained', num(val('Primary - Female Trained Teachers'))),
+    row('JHS – Total Trained', num(val('JHS - Total Trained Teachers'))),
+    row('JHS – Male Trained', num(val('JHS - Male Trained Teachers'))),
+    row('JHS – Female Trained', num(val('JHS - Female Trained Teachers'))),
+    row('Vacancies', num(val('Vacancies'))),
+    row('Teacher Desks', num(val('Number of Teachers Desks'))),
+    row('Teacher Chairs', num(val('Number of Teachers Chairs'))),
+  ])}
+
+  ${section('Classrooms', [
+    row('Old No. of Classrooms', num(val('OLD NUMBER OF CLASSROOMS'))),
+    row('Current No. of Classrooms', num(val('NUMBER OF CLASSROOMS'))),
+    row('KG – Permanent', num(val('KG - Permanent Classrooms'))),
+    row('KG – Temporary', num(val('KG - Temporary Classrooms'))),
+    row('Primary – Permanent', num(val('Primary - Permanent Classrooms'))),
+    row('Primary – Temporary', num(val('Primary - Temporary Classrooms'))),
+    row('JHS – Permanent', num(val('JHS - Permanent Classrooms'))),
+    row('JHS – Temporary', num(val('JHS - Temporary Classrooms'))),
+  ])}
+
+  ${section('WASH Facilities', [
+    row('Has Water Access', bool(val('Has Access to Water'))),
+    row('Water Ownership', val('Water Ownership')),
+    row('Water Shared with Nearby School', bool(val('Water Shared with Nearby School'))),
+    row('Water Source Types', val('Water Source Types')),
+    row('Owns Toilet Facilities', bool(val('Owns Toilet Facilities'))),
+    row('Learners Have Toilet Access', bool(val('Learners Have Toilet Access'))),
+    row('Toilet Cubicles – Boys', num(val('Toilet Cubicles - Boys'))),
+    row('Toilet Cubicles – Girls', num(val('Toilet Cubicles - Girls'))),
+    row('Owns Urinal Facilities', bool(val('Owns Urinal Facilities'))),
+    row('Learners Have Urinal Access', bool(val('Learners Have Urinal Access'))),
+    row('Urinal Stations – Boys', num(val('Urinal Stations - Boys'))),
+    row('Urinal Stations – Girls', num(val('Urinal Stations - Girls'))),
+  ])}
+
+  ${section('Staff Welfare & Accommodation', [
+    row('Has Staff Accommodation', bool(val('Has Staff Accommodation'))),
+    row('Total Teachers in Accommodation', num(val('Staff Accommodation - Total Teachers'))),
+    row('Male Teachers in Accommodation', num(val('Staff Accommodation - Male Teachers'))),
+    row('Female Teachers in Accommodation', num(val('Staff Accommodation - Female Teachers'))),
+    row('Has Ongoing Projects', bool(val('Has Ongoing Projects'))),
+    row('Projects Summary', val('Projects Summary')),
+    row('Projects Data', val('Projects Data')),
+  ])}
+
+  ${section('Infrastructure & Facilities', [
+    row('Has Staff Common Room', bool(val('Has Staff Common Room'))),
+    row('Has ICT Laboratory', bool(val('Has ICT Laboratory'))),
+    row('Has Library', bool(val('Has Library'))),
+    row('Has School Farm', bool(val('Has School Farm'))),
+    row('GALOP Beneficiary', bool(val('Is GALOP Beneficiary'))),
+    row('School Feeding Beneficiary', bool(val('Is School Feeding Beneficiary'))),
+    row('Has Electricity Access', bool(val('Has Electricity Access'))),
+    row('Electricity Source', val('Electricity Source')),
+  ])}
+
+  <div class="sig-section">
+    <div class="sig-box">
+      <div class="sig-label">Verified by (Signature)</div>
+      <div class="sig-line"></div>
+      <div class="sig-name">${officer}</div>
+      <div class="sig-role">Statistics Officer &nbsp;·&nbsp; ${d}</div>
+    </div>
+    <div class="sig-box">
+      <div class="sig-label">Headteacher / School Representative (Signature)</div>
+      <div class="sig-line"></div>
+      <div class="sig-name">&nbsp;</div>
+      <div class="sig-role">Name &amp; Date</div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Ahafo Ano South-West Education Directorate · Statistics and Planning Unit · Field Monitoring Tool</span>
+    <span>OFFICIAL DOCUMENT — For verification purposes only</span>
+  </div>
+
+</div>
+
+<script>
+  // Auto-trigger print dialog for Save as PDF
+  window.onload = function(){ window.print(); };
+<\/script>
+</body>
+</html>`;
+
+  const printWin = window.open('', '_blank', 'width=900,height=700,scrollbars=yes');
+  if(!printWin){ alert('Please allow pop-ups for this page to export the PDF report.'); return; }
+  printWin.document.write(htmlContent);
+  printWin.document.close();
+}
+
+function switchTab(tab, btn){
+  document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+  document.querySelectorAll('.tab-panel').forEach(function(p){ p.classList.remove('active'); });
+  btn.classList.add('active');
+  document.getElementById('panel-'+tab).classList.add('active');
+}
+</script>
+</body>
+</html>
